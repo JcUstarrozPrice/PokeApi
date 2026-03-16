@@ -28,6 +28,12 @@ export const pokemonApi = createApi({
   endpoints: (builder) => ({
     getPokemons: builder.query<Pokemon, number>({
       query: (offset: number = 0) => `pokemon?limit=${limit}&offset=${offset}`,
+      transformResponse: (response: Pokemon) => {
+        return {
+          ...response,
+          results: [...response.results].sort((a: PokemonResult, b: PokemonResult) => a.name.localeCompare(b.name))
+        }
+      }
     }),
     getPokemonByName: builder.query<PokemonByName, string>({
       query: (name: string | null) => `pokemon/${name}`,
